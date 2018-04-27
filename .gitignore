@@ -1,0 +1,8 @@
+# editor fluff
+*~
+*\#
+
+# directory containing a python module under its own version control
+success/*
+
+
