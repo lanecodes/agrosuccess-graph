@@ -6,3 +6,7 @@
 success/*
 
 
+planning/Transition-table.pdf
+*.pyc
+planning/extract_Millington_succession_pathway.html
+planning/.ipynb_checkpoints/*
