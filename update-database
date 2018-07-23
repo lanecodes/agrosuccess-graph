@@ -1,6 +1,5 @@
 #! /usr/bin/env bash
 
-PYENV="/home/andrew/.local/share/virtualenvs/loadcypher-g6m2fOmG/bin/python"
-LOADCYPHER="/home/andrew/Dropbox/codes/python/utilities/loadcypher/loadcypher/__init__.py"
-$PYENV $LOADCYPHER --refresh -u andrew -d views -p global_parameters.json --suffix _w
+PYENV="/home/andrew/anaconda2/envs/graphs27/bin/python"
+$PYENV -m cymod --refresh -u andrew -d views -p global_parameters.json --suffix _w
 
