@@ -16,6 +16,7 @@
 
 // 1. Water/ Quarry
 CREATE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
+			num:0,
 			model_ID:$model_ID,
 			fertility:-1,
 			digestible_matter:-1,
@@ -24,6 +25,7 @@ CREATE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
 
 // 2. Burnt
 CREATE (:LandCoverType {description:"Burnt", code:"Burnt",
+			num:1,
 			model_ID:$model_ID,
 			fertility:5,
 			digestible_matter:1,
@@ -32,6 +34,7 @@ CREATE (:LandCoverType {description:"Burnt", code:"Burnt",
 
 // 3. Barley
 CREATE (:LandCoverType {description:"Barley", code:"Barley",
+			num:2,
 			model_ID:$model_ID,
 			fertility:4,
 			digestible_matter:2,
@@ -40,6 +43,7 @@ CREATE (:LandCoverType {description:"Barley", code:"Barley",
 
 // 4. Wheat
 CREATE (:LandCoverType {description:"Wheat", code:"Wheat",
+			num:3,
 			model_ID:$model_ID,
 			fertility:4,
 			digestible_matter:2,
@@ -48,6 +52,7 @@ CREATE (:LandCoverType {description:"Wheat", code:"Wheat",
 
 // 5. Depleated agricultural land 
 CREATE (:LandCoverType {description:"Depleated Agricultural Land", code:"DAL",
+			num:4,
 			model_ID:$model_ID,
 			fertility:1,
 			digestible_matter:2,
@@ -56,6 +61,7 @@ CREATE (:LandCoverType {description:"Depleated Agricultural Land", code:"DAL",
 
 // 6. Shrubland
 CREATE (:LandCoverType {description:"Shrubland", code:"Shrubland",
+			num:5,
 			model_ID:$model_ID,
 			fertility:2,
 			digestible_matter:5,
@@ -64,6 +70,7 @@ CREATE (:LandCoverType {description:"Shrubland", code:"Shrubland",
 
 // 7. Pine
 CREATE (:LandCoverType {description:"Pine", code:"Pine",
+			num:6,
 			model_ID:$model_ID,
 			fertility:2,
 			digestible_matter:2,
@@ -72,6 +79,7 @@ CREATE (:LandCoverType {description:"Pine", code:"Pine",
 
 // 8. Transition forest
 CREATE (:LandCoverType {description:"Transition Forest", code:"TransForest",
+			num:7,
 			model_ID:$model_ID,
 			fertility:3,
 			digestible_matter:4,
@@ -80,6 +88,7 @@ CREATE (:LandCoverType {description:"Transition Forest", code:"TransForest",
 
 // 9. Deciduous
 CREATE (:LandCoverType {description:"Deciduous", code:"Deciduous",
+			num:8,
 			model_ID:$model_ID,
 			fertility:3,
 			digestible_matter:5,
@@ -88,6 +97,7 @@ CREATE (:LandCoverType {description:"Deciduous", code:"Deciduous",
 
 // 10. Oak
 CREATE (:LandCoverType {description:"Oak", code:"Oak",
+			num:9,
 			model_ID:$model_ID,
 			fertility:3,
 			digestible_matter:4,
