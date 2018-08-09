@@ -126,15 +126,39 @@ class EnvironTransitionSet(object):
     def transitions(self, value):
         self._transitions = value
 
-    # TODO
-    def apply_state_aliases(state_aliases):
-        """Consume state alias dict and apply to each EnvironTransition."""
-        pass
+    def _make_dict_mapper(self, data_dict):
+        def get_value(key):
+            if key in data_dict.keys():
+                return data_dict[key]
+            else:
+                return key
+        return get_value
 
-    # TODO
-    def apply_environ_condition_aliases(env_cond_aliases):
+    def apply_state_aliases(self, state_aliases):
+        """Consume state alias dict and apply to each EnvironTransition.
+
+        Be careful to ensure the type of the keys in the state_alias dict
+        match the type of the state codes included in the input data.
+        """
+        state_alias_mapper = self._make_dict_mapper(state_aliases)
+        for et in self.transitions:
+            et.start_state = state_alias_mapper(et.start_state)
+            et.end_state = state_alias_mapper(et.end_state)
+
+    def apply_environ_condition_aliases(self, env_cond_aliases):
         """Consume env condition aliases dict, apply to EnvironTransition-s."""
-        pass
+        alias_mappers = {}
+        for k in env_cond_aliases.keys():
+            # make a dictionary of functions which return value alias if given
+            alias_mappers[k] = self._make_dict_mapper(env_cond_aliases[k])
+
+        for et in self.transitions:
+            for k in et.env_conds.keys():
+                try:
+                    et.env_conds[k] = alias_mappers[k](et.env_conds[k])
+                except KeyError as e:
+                    print('WARNING: couldn\'t find alias for environmental' +
+                          ' condition {0}'.format(k) + e)
 
     def _get_header_str(self, project_path, start_code, end_code):
         """Construct the header portion of the Cypher file.
