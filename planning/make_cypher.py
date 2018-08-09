@@ -1,119 +1,237 @@
 #! /usr/bin/env python
 import os
 import datetime
+from future.utils import iteritems
 import pandas as pd
 
-def get_header_str(project_path, start_code, end_code):
-    """Return a string which will make up the header portion of the Cypher 
-       file which will specify the SuccessionTrajectory between 
-       ``start_code`` and ``end_code`` along with all the possible 
-       combinations of EnvironConditions which cause that transition.
 
-    """
-    header_str = """
-    //==============================================================================
-    // file: {0}/{1}_to_{2}_w.cql
-    // modified: {3}
-    // dependencies:
-    //     abstract/LandCoverType_w.cql
-    // external parameters:
-    //     model_ID, used to identify model created nodes belong to 
-    // description:
-    //     Create the Successiontrajectory representing the possibility of 
-    //     transition between the {1} and {2} LandCoverState-s. Also specify all 
-    //     combinations of environmental conditions which can lead to this 
-    //     transition.
-    //==============================================================================
+class EnvironTransition(object):
+    """Representation of a single environmental transition."""
 
-    {{
-     "priority":1
-    }}
-    """.format(project_path, start_code, end_code, str(datetime.date.today()))
-    return header_str
+    def __init__(self, start_state, end_state, time, env_conds):
+        """
+        Args:
+            start_state (str): Start state for transition
+            end_state (str): End state for transition
+            time (str): Time taken for transition
+            env_conds (dict): Key/value pairs of environmental conditions
+                which lead to transition
+        """
+        self.start_state = start_state
+        self.end_state = end_state
+        self.time = time
+        self.env_conds = env_conds
 
-def get_succession_traj_query(start_code, end_code):
-    """Return a string containing the appropriate query to create a 
-       SuccessionTrajectory between ``start_code`` and ``end_code``
+    def _key_value_string_repr(self, key, val):
+        """Return a string describing a given env condition and its state.
 
-    """
-    traj_query = """
-    MATCH
-      (srcLCT:LandCoverType {{code:\"{0}\", model_ID:$model_ID}}),
-      (tgtLCT:LandCoverType {{code:\"{1}\", model_ID:$model_ID}})
-    CREATE
-      (traj:SuccessionTrajectory {{model_ID:$model_ID}})
-    MERGE (srcLCT)<-[:SOURCE]-(traj)-[:TARGET]->(tgtLCT);
+        Punctuation should be appropriate given type, e.g.
+        time:10 (integer)
+        good:true (boolean)
+        water:"xeric" (string)
+        """
+        if isinstance(val, str):
+            return '{0}:"{1}"'.format(key, val)
+        elif isinstance(val, bool):
+            return '{0}:{1}'.format(key, repr(val).lower())
+        else:
+            return '{0}:{1}'.format(key, val)
 
-    """.format(start_code, end_code)
-    return traj_query
+    def time_as_string(self):
+        return 'delta_t:{0}'.format(self.time)
 
-def get_env_cond_query(row):
-    """Given a pandas dataframe row, construct query to load environmental
-       conditions.
-    
-    """
-    succ = 'secondary' if row['succession'] == 1 else 'regeneration'
-    aspe = 'south' if row['aspect'] == 1 else 'north'
-    pine = 'true' if row['pine'] == 1 else 'false'
-    oak = 'true' if row['oak'] == 1 else 'false'
-    decid = 'true' if row['deciduous'] == 1 else 'false'
-    if row['water'] == 0:
-        water = 'xeric'
-    elif row['water'] == 1:
-        water = 'mesic'
-    else:
-        water = 'hydric'
-    delta_t = row['delta_T']
-    
-    env_cond_query = """
-    MERGE 
-      (ec:EnvironCondition {{model_ID:$model_ID,
-                            succession:\"{0}\", 
-                            aspect:\"{1}\", 
-                            pine:{2},
-                            oak:{3},
-                            deciduous:{4},
-                            water:\"{5}\",
-                            delta_t:\"{6}\"}})
-    WITH ec
-    MATCH 
-      (:LandCoverType {{code:\"{7}\", model_ID:$model_ID}})
-      <-[:SOURCE]-(traj:SuccessionTrajectory {{model_ID:$model_ID}})-[:TARGET]->
-      (:LandCoverType {{code:\"{8}\", model_ID:$model_ID}}) 
-    MERGE 
-      (ec)-[:CAUSES]->(traj);
-    """.format(succ, aspe, pine, oak, decid, water, delta_t,
-               row['start_code'], row['end_code'])
-    return env_cond_query
+    def env_cond_as_string(self):
+        states = []
+        for (cond, state) in iteritems(self.env_conds):
+            states.append(self._key_value_string_repr(cond, state))
+        return ',\n'.join(states)
 
-def get_file_dict(df):
-    d = {}
-    for index, row in df.iterrows():
-        start = row['start_code']
-        end = row['end_code']
-        fname = start +'_to_'+ end +'_w.cql'
-        if fname not in d:
-            d[fname] = get_header_str('succession', start, end) +\
-                       get_succession_traj_query(start, end)
-        d[fname] += get_env_cond_query(row)
+    def __repr__(self):
+        return (
+            self._key_value_string_repr('start', self.start_state) + ',\n' +
+            self._key_value_string_repr('end', self.end_state) + ',\n' +
+            self.env_cond_as_string() + ',\n' +
+            self.time_as_string()
+        )
 
-    return d
-                                            
 
-    
-        
+class EnvironTransitionSet(object):
+    """Representation of all possible environmental transitions."""
+
+    def __init__(self, df, start_state_col, end_state_col, time_col,
+                 env_cond_cols=None):
+        """Setup EnvironTransitionSet object from table.
+
+        Args:
+            df (pd.DataFrame): Table specifying environmental transitions.
+            start_state_col (str): Name of table column specifying transition
+                start state.
+            end_state_col (str): Name of table column specifying transition
+                end state.
+            time_col (str): Name of table column specifying time taken to
+                complete the transition specified by each row.
+            env_cond_cols (list of str, optional): Names of columns which
+                specify combinations of environmental conditions leading
+                to the transition specified by each row. If not given
+                these will be assumed to be all the columns in the DataFrame
+                not already specified.
+        """
+        processed_env_cond_cols = self._infer_env_cond_cols(
+            df,
+            start_state_col,
+            end_state_col,
+            time_col,
+            env_cond_cols
+        )
+
+        self._transitions = self._process_environ_transitions(
+            df,
+            start_state_col,
+            end_state_col,
+            time_col,
+            processed_env_cond_cols
+        )
+
+    def _infer_env_cond_cols(self, df, start_state_col, end_state_col,
+                             time_col, env_cond_cols):
+        """Work out which columns specify environmental conditions.
+
+        If `env_cond_cols` specified in constructor, use those. Otherwise
+        assume every column not already specified is an environmental
+        condition.
+        """
+        if env_cond_cols:
+            return env_cond_cols
+        else:
+            return [col for col in df.columns
+                    if col not in [start_state_col, end_state_col, time_col]]
+
+    def _process_environ_transitions(self, df, start_state_col, end_state_col,
+                                     time_col, env_cond_cols):
+        """Process table, return list of EnvironCondition objects."""
+        env_conds = []
+        for index, row in df.iterrows():
+            cond = row[env_cond_cols].to_dict()
+            env_conds.append(EnvironTransition(row[start_state_col],
+                                               row[end_state_col],
+                                               row[time_col],
+                                               cond))
+        return env_conds
+
+    @property
+    def transitions(self):
+        return self._transitions
+
+    @transitions.setter
+    def transitions(self, value):
+        self._transitions = value
+
+    # TODO
+    def apply_state_aliases(state_aliases):
+        """Consume state alias dict and apply to each EnvironTransition."""
+        pass
+
+    # TODO
+    def apply_environ_condition_aliases(env_cond_aliases):
+        """Consume env condition aliases dict, apply to EnvironTransition-s."""
+        pass
+
+    def _get_header_str(self, project_path, start_code, end_code):
+        """Construct the header portion of the Cypher file.
+
+        This will specify the SuccessionTrajectory between ``start_code`` and
+        ``end_code`` along with all the possible combinations of
+        EnvironConditions which cause that transition.
+        """
+        header_str = """
+//==============================================================================
+        // file: {0}/{1}_to_{2}_w.cql
+        // modified: {3}
+        // dependencies:
+        //     abstract/LandCoverType_w.cql
+        // external parameters:
+        //     model_ID, used to identify model created nodes belong to 
+        // description:
+        //     Create the Successiontrajectory representing the possibility of 
+        //     transition between the {1} and {2} LandCoverState-s. Also specify all 
+        //     combinations of environmental conditions which can lead to this 
+        //     transition.
+        //==============================================================================
+
+        {{
+         "priority":1
+        }}
+        """.format(project_path, start_code, end_code,
+                   str(datetime.date.today()))
+        return header_str
+
+    def _get_succession_traj_query(self, start_code, end_code):
+        """Return a string containing a SuccessionTrajectory query.
+
+        This will specify the possibility of transitioning from ``start_code``
+        to ``end_code``
+        """
+        traj_query = """
+        MATCH
+          (srcLCT:LandCoverType {{code:\"{0}\", model_ID:$model_ID}}),
+          (tgtLCT:LandCoverType {{code:\"{1}\", model_ID:$model_ID}})
+        CREATE
+          (traj:SuccessionTrajectory {{model_ID:$model_ID}})
+        MERGE (srcLCT)<-[:SOURCE]-(traj)-[:TARGET]->(tgtLCT);
+
+        """.format(start_code, end_code)
+        return traj_query
+
+    def _get_env_cond_query(self, env_trans):
+        """Given an EnvironTransition construct environ conditions query."""
+        env_cond_query = """
+        MERGE
+          (ec:EnvironCondition {{model_ID:$model_ID,
+                                {0},
+                                {1}}})
+        WITH ec
+        MATCH
+          (:LandCoverType {{code:\"{2}\", model_ID:$model_ID}})
+          <-[:SOURCE]-(traj:SuccessionTrajectory {{model_ID:$model_ID}})-[:TARGET]->
+          (:LandCoverType {{code:\"{3}\", model_ID:$model_ID}})
+        MERGE
+          (ec)-[:CAUSES]->(traj);
+        """.format(env_trans.env_cond_as_string().replace(',\n', ',\n'+32*' '),
+                   env_trans.time_as_string(),
+                   env_trans.start_state, env_trans.end_state)
+        return env_cond_query
+
+    def _get_file_dict(self):
+        """Return file name/ file contents key/value pairs."""
+        d = {}
+        for trans in self.transitions:
+            start = trans.start_state
+            end = trans.end_state
+            fname = start + '_to_' + end + '_w.cql'
+            if fname not in d:
+                d[fname] = self._get_header_str('succession', start, end) + \
+                           self._get_succession_traj_query(start, end)
+            d[fname] += self._get_env_cond_query(trans)
+
+        return d
+
+    def write_cypher_files(self, project_path):
+        target_dir = os.path.join(project_path, 'succession')
+        if not os.path.isdir(target_dir):
+            os.makedirs(target_dir)
+
+        d = self._get_file_dict()
+        for k in d.keys():
+            fname = os.path.join(target_dir, k)
+            with open(fname, 'w') as f:
+                f.write(d[k])
+
 
 if __name__ == """__main__""":
     df = pd.read_pickle('traj.pkl')
-    d = get_file_dict(df)
-    for k in d.keys():
-        with open(os.path.join('succession', k), 'w') as f:
-            f.write(d[k])
-                  
-        
-#    print get_env_cond_query(df.iloc[130])
-#    print get_header_str('succession', 'Pine', 'Oak') + get_succession_traj_query('pine', 'oak')
+    env_trans_set = EnvironTransitionSet(df, 'start_code', 'end_code',
+                                         'delta_T')
 
-
-
-    
+    # env_trans_set.apply_environ_condition_aliases({})
+    # env_trans_set.apply_state_aliases({})
+    env_trans_set.write_cypher_files('~/AgroSuccess/views')
