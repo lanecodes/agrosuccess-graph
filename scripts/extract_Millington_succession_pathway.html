@@ -11759,7 +11759,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
@@ -11782,7 +11782,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span>%%bash
@@ -11803,12 +11803,14 @@ ls
 <pre>1-s2.0-S1364815209000863-mmc1.doc
 calculating-disturbance-frequencies.pdf
 development-notes.org~
+extract_Millington_succession_pathway.bup.html
 extract_Millington_succession_pathway.html
 extract_Millington_succession_pathway.ipynb
 landcover-properties.csv
 make_cypher.py
 make_cypher.py~
 make_cypher.pyc
+Millington_succession.csv
 Millington-Thesis-Transition-Table.pdf
 model-specification.odp
 test
@@ -11838,7 +11840,7 @@ transition_table_to_cypher.py~
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;1-s2.0-S1364815209000863-mmc1.html&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -11858,14 +11860,18 @@ transition_table_to_cypher.py~
 
 
 <div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
-&lt;!DOCTYPE html PUBLIC &#34;-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN&#34; &#34;http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd&#34;&gt;&lt;html xmlns=&#34;http://www.w3.org/1999/xhtml&#34;&gt;&lt;!--This file was converted to xhtml by LibreOffice - see http://cgit.freedesktop.org/libreoffice/core/tree/filter/source/xslt for the code.--&gt;&lt;head profile=&#34;http://dublincore.org/documents/dcmi-terms/&#34;&gt;&lt;meta http-equiv=&#34;Content-Type&#34; content=&#34;application/xhtml+xml; charset=utf-8&#34;/&gt;&lt;title xml:la
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">IOError</span>                                   Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-25-2a3890de2fab&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span><span class="ansi-green-fg">with</span> open<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;1-s2.0-S1364815209000863-mmc1.html&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;r&#39;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">as</span> f<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span>     html_string <span class="ansi-blue-fg">=</span> f<span class="ansi-blue-fg">.</span>read<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> 
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">print</span> html_string<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">500</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> <span class="ansi-green-fg">print</span> <span class="ansi-blue-fg">&#39;\n...\n&#39;</span>
 
-...
-
-nce of Deciduous seeds, 0 = False, 1 = True&lt;/p&gt;&lt;p class=&#34;P1&#34;&gt;&lt;span class=&#34;T4&#34;&gt;Water&lt;/span&gt;: Soil moisture, 0 = xeric, 1 = mesic, 2 = hydric&lt;/p&gt;&lt;p class=&#34;P1&#34;&gt;&lt;span class=&#34;T6&#34;&gt;&lt;/span&gt;&lt;span class=&#34;T4&#34;&gt;D&lt;/span&gt;&lt;span class=&#34;T9&#34;&gt;&lt;/span&gt; Land-cover given by code in Table 1&lt;/p&gt;&lt;p class=&#34;P1&#34;&gt;&lt;span class=&#34;T6&#34;&gt;&lt;/span&gt;&lt;span class=&#34;T4&#34;&gt;T&lt;/span&gt;&lt;span class=&#34;T9&#34;&gt;&lt;/span&gt;Total time (years) required to complete transition from S to &lt;span class=&#34;T9&#34;&gt;&lt;/span&gt; D&lt;/p&gt;&lt;p class=&#34;P4&#34;&gt; &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-</pre>
+<span class="ansi-red-fg">IOError</span>: [Errno 2] No such file or directory: &#39;1-s2.0-S1364815209000863-mmc1.html&#39;</pre>
 </div>
 </div>
 
@@ -12095,7 +12101,7 @@ nce of Deciduous seeds, 0 = False, 1 = True&lt;/p&gt;&lt;p class=&#34;P1&#34;&gt
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">df_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="s1">&#39;succession&#39;</span><span class="p">,</span> <span class="s1">&#39;aspect&#39;</span><span class="p">,</span> <span class="s1">&#39;pine&#39;</span><span class="p">,</span> <span class="s1">&#39;oak&#39;</span><span class="p">,</span> <span class="s1">&#39;deciduous&#39;</span><span class="p">,</span> <span class="s1">&#39;water&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_D&#39;</span><span class="p">,</span> <span class="s1">&#39;delta_T&#39;</span><span class="p">]</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Millington_succession.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -12179,7 +12185,7 @@ rm <span class="s1">&#39;1-s2.0-S1364815209000863-mmc1.html&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">state_vals</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
@@ -12198,13 +12204,38 @@ rm <span class="s1">&#39;1-s2.0-S1364815209000863-mmc1.html&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">state_vals</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>               Land-cover  state_num
+0                    Pine          1
+1       Transition Forest          2
+2               Deciduous          3
+3                Holm Oak          4
+4                 Pasture          5
+5   Holm Oak with Pasture          6
+6                Cropland          7
+7               Shrubland          8
+8            Water/Quarry          9
+9                   Urban         10
+10                  Burnt         11
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -12221,7 +12252,7 @@ rm <span class="s1">&#39;1-s2.0-S1364815209000863-mmc1.html&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">map_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;WaterQuarry&#39;</span><span class="p">,</span> <span class="s1">&#39;Burnt&#39;</span><span class="p">,</span> <span class="s1">&#39;Barley&#39;</span><span class="p">,</span> <span class="s1">&#39;Wheat&#39;</span><span class="p">,</span> <span class="s1">&#39;DAL&#39;</span><span class="p">,</span> <span class="s1">&#39;Pine&#39;</span><span class="p">,</span> <span class="s1">&#39;TransForest&#39;</span><span class="p">,</span> 
@@ -12272,7 +12303,7 @@ rm <span class="s1">&#39;1-s2.0-S1364815209000863-mmc1.html&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
@@ -12299,7 +12330,7 @@ rm <span class="s1">&#39;1-s2.0-S1364815209000863-mmc1.html&#39;</span>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">tmp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">map_df</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;state_num&#39;</span><span class="p">)</span>
@@ -12322,8 +12353,8 @@ rm <span class="s1">&#39;1-s2.0-S1364815209000863-mmc1.html&#39;</span>
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>No. records before dropping rows not corresponding to PhD states: 847
-No. records after dropping rows not corresponding to PhD states: 628
+<pre>No. records before dropping rows not corresponding to PhD states: 751
+No. records after dropping rows not corresponding to PhD states: 0
 </pre>
 </div>
 </div>
@@ -12334,7 +12365,7 @@ No. records after dropping rows not corresponding to PhD states: 628
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="k">print</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;start_code&#39;</span><span class="p">,</span> <span class="s1">&#39;end_code&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
@@ -12350,25 +12381,9 @@ No. records after dropping rows not corresponding to PhD states: 628
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>      start_code     end_code
-0           Pine         Pine
-14          Pine  TransForest
-26          Pine          Oak
-79   TransForest         Pine
-91   TransForest  TransForest
-99   TransForest          Oak
-175    Deciduous    Shrubland
-271          Oak         Pine
-281          Oak  TransForest
-284          Oak          Oak
-367    Shrubland         Pine
-385    Shrubland    Shrubland
-403    Shrubland          Oak
-419    Shrubland  TransForest
-511       Barley    Shrubland
-512        Wheat    Shrubland
-513          DAL    Shrubland
-751        Burnt    Shrubland
+<pre>Empty DataFrame
+Columns: [start_code, end_code]
+Index: []
 </pre>
 </div>
 </div>
