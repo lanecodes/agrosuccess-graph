@@ -8,14 +8,15 @@ success/*
 
 planning/Transition-table.pdf
 *.pyc
-planning/extract_Millington_succession_pathway.html
-planning/.ipynb_checkpoints/*
 data/\.ipynb_checkpoints/
+data/repurpose_trans_rules_agrosuccess.html
 
 # temporary script-generated files
 data/tmp/*
 
 # logs
 scripts/logs/
+
+
 
 

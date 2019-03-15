@@ -3,7 +3,7 @@ repurpose_trans_rules_agrosuccess.py
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Input is the file ../data/tmp/millington_succession.csv
-- Output is the file 
+- Output is the file ../data/created/agrosuccess_succession.csv
 
 """
 import os 
