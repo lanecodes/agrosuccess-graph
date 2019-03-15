@@ -29,61 +29,87 @@ machine-readable .csv format.
 - Output is the file ../data/tmp/millington_succession.csv
 
 """
-import os 
-import sys
+import os
 import subprocess
-
+import logging
 import pandas as pd
+from config import DIRS, exit_if_file_missing
 
-# -------------- SET UP DIRECTORIES, CHECK INPUT FILES PRESENT ----------------
-# Change working directory to location of script
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+def convert_doc_to_html(doc_file, output_dir, overwrite=True):
+    """Use Libreoffice's `soffice` command to convert .doc file to .html.
 
-# Create references to directories and files
-DATA_DIR = os.path.abspath(os.path.join("..", "data"))
-RAW_DIR = os.path.join(DATA_DIR, "raw")
-TMP_DIR = os.path.join(DATA_DIR, "tmp")
-for d in [RAW_DIR, TMP_DIR]:
-    try:
-        os.makedirs(d)
-    except FileExistsError:
-        pass
+    Tested with LibreOffice 5.1.6.2 10m0(Build:2) in Mar 2019.
 
-SRC_FILE = os.path.join(RAW_DIR, "1-s2.0-S1364815209000863-mmc1.doc")
-if not os.path.isfile(SRC_FILE):
-    sys.exit("Source file {0} does not exist.".format(SRC_FILE))
+    Returns:
+        str: Name of the output html file.
+    """  
+    html_basename = os.path.basename(doc_file).split(".doc")[0] + ".html"
+    html_fname = os.path.join(output_dir, html_basename)
+    cmd = ["soffice", "--convert-to", "html:XHTML Writer File:UTF8", doc_file]
 
-OUT_FILE = os.path.join(TMP_DIR, "millington_succession.csv")
-
-LOG_FILE = os.path.basename(__file__).split(".py")[0] + ".log"
-if os.path.exists(LOG_FILE):
-    os.remove(LOG_FILE)
-
-
-# ----------------------- CONVERT .DOC FILE TO HTML ---------------------------
-# Uses the soffice command which comes with Libreoffice. 
-# Output of soffice --version at time of writing:
-# > LibreOffice 5.1.6.2 10m0(Build:2)
-table_html_file_base = os.path.basename(SRC_FILE).split(".doc")[0] + ".html"
-table_html_file = os.path.join(TMP_DIR, table_html_file_base)
-if not os.path.exists(table_html_file):
-    with open(LOG_FILE, "a") as lf:
-        subprocess.run(["soffice", "--convert-to", 
-            "html:XHTML Writer File:UTF8", SRC_FILE], stdout=lf)
+    if overwrite or not os.path.exists(html_fname):
+        cp = subprocess.run(cmd, capture_output=True)
+        logging.info(cp.stdout)
+        if cp.stderr:
+            logging.error(cp.stderr)
     
-    # Move html file to temp directory
-    os.rename(table_html_file_base, table_html_file)
+    # Move html file to output directory
+    os.rename(os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), html_basename), html_fname)
 
-# ----------------- EXTRACT HTML TABLE WITH PANDAS ----------------------------
-# Get dataframe from the html using pandas
-with open(table_html_file, "r") as f:
-    df = pd.read_html(f.read())[0]
+    return html_fname
 
-df.columns = ['start', 'succession', 'aspect', 'pine', 'oak', 'deciduous', 
-    'water', 'delta_D', 'delta_T']
-df.drop(0, inplace=True)
-df.to_csv(OUT_FILE, index=False, encoding='ascii')
-print("Millington transition table written to " + OUT_FILE)
+def millington_succession_html_to_csv(html_file, csv_fname):
+    """Scrapes the table from Millington 2009 supplementary materials.
+    
+    Returns:
+        str: Name of the resulting csv file.
+    """
+    # Get dataframe from the html using pandas
+    with open(html_file, "r") as f:
+        df = pd.read_html(f.read())[0]
 
-# ----------------- REMOVE TEMPORARY HTML FILE --------------------------------
-os.remove(table_html_file)
+    df.columns = [
+        'start', 
+        'succession', 
+        'aspect', 
+        'pine', 
+        'oak', 
+        'deciduous', 
+        'water', 
+        'delta_D', 
+        'delta_T',
+    ]
+    
+    # First row in extracted table is header info
+    df.drop(0, inplace=True)
+    df.to_csv(csv_fname, index=False, encoding='ascii')
+    logging.info("Millington transition table written to " + csv_fname)
+    
+    return csv_fname
+
+if __name__ == "__main__":
+    # Change working directory to location of script
+    os.chdir(DIRS["scripts"])
+
+    # Check necessary files and directories exist
+    SRC_FILE = os.path.join(
+        DIRS["data"]["raw"], "1-s2.0-S1364815209000863-mmc1.doc")
+    exit_if_file_missing(SRC_FILE)
+
+    # set up logging
+    LOG_FILE = os.path.join(
+        DIRS["logs"], os.path.basename(__file__).split(".py")[0] + ".log")
+    logging.basicConfig(filename=LOG_FILE, filemode='w', level=logging.INFO)
+
+    # Make reference to output file name
+    OUT_FILE = os.path.join(DIRS["data"]["tmp"], "millington_succession.csv")
+
+    # Convert .doc file from Millington2009 sup. materials to html file
+    html_fname = convert_doc_to_html(SRC_FILE, DIRS["data"]["tmp"], LOG_FILE)
+    
+    # Convert intermediate html file to csv
+    millington_succession_html_to_csv(html_fname, OUT_FILE)
+
+    # remove temporary html file
+    os.remove(html_fname)

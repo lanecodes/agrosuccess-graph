@@ -16,6 +16,6 @@ data/\.ipynb_checkpoints/
 data/tmp/*
 
 # logs
-scripts/*.log
+scripts/logs/
 
 

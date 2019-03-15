@@ -7,33 +7,29 @@ repurpose_trans_rules_agrosuccess.py
 
 """
 import os 
-import sys
-import subprocess
+import logging
 
 import pandas as pd
+from config import DIRS, exit_if_file_missing
 
-# -------------- SET UP DIRECTORIES, CHECK INPUT FILES PRESENT ----------------
-# Change working directory to location of script
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
+# TODO Add functions required to repurpose Millington succession table for 
+# Agrosuccess
 
-# Create references to directories and files
-DATA_DIR = os.path.abspath(os.path.join("..", "data"))
-CREATED_DIR = os.path.join(DATA_DIR, "created")
-TMP_DIR = os.path.join(DATA_DIR, "tmp")
-for d in [CREATED_DIR, TMP_DIR]:
-    try:
-        os.makedirs(d)
-    except FileExistsError:
-        pass
+if __name__ == "__main__":
+    # Change working directory to location of script
+    os.chdir(DIRS["scripts"])
 
-SRC_FILE = os.path.join(TMP_DIR, "millington_succession.csv")
-if not os.path.isfile(SRC_FILE):
-    sys.exit("Source file {0} does not exist.".format(SRC_FILE))
+    # Check necessary files and directories exist
+    SRC_FILE = os.path.join(
+        DIRS["data"]["tmp"], "millington_succession.csv")
+    exit_if_file_missing(SRC_FILE)
 
-OUT_FILE = os.path.join(CREATED_DIR, "agrosuccess_succession.csv")
+    # set up logging
+    LOG_FILE = os.path.join(
+        DIRS["logs"], os.path.basename(__file__).split(".py")[0] + ".log")
+    logging.basicConfig(filename=LOG_FILE, filemode='w', level=logging.INFO)
 
-LOG_FILE = os.path.basename(__file__).split(".py")[0] + ".log"
-if os.path.exists(LOG_FILE):
-    os.remove(LOG_FILE)
+    # Make reference to output file name
+    OUT_FILE = os.path.join(
+        DIRS["data"]["created"], "agrosuccess_succession.csv")
 
-print(OUT_FILE)
