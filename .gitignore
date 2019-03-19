@@ -11,11 +11,14 @@ planning/Transition-table.pdf
 data/\.ipynb_checkpoints/
 data/repurpose_trans_rules_agrosuccess.html
 
-# temporary script-generated files
+# script-generated files
 data/tmp/*
+data/created/agrosuccess_succession.csv
 
 # logs
 scripts/logs/
+
+
 
 
 
