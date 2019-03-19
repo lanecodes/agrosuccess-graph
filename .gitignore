@@ -9,7 +9,7 @@ success/*
 planning/Transition-table.pdf
 *.pyc
 data/\.ipynb_checkpoints/
-data/repurpose_trans_rules_agrosuccess.html
+legacy/repurpose_trans_rules_agrosuccess\.html
 
 # script-generated files
 data/tmp/*
@@ -17,9 +17,5 @@ data/created/agrosuccess_succession.csv
 
 # logs
 scripts/logs/
-
-
-
-
 
 
