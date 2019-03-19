@@ -55,7 +55,7 @@ def convert_doc_to_html(doc_file, output_dir, overwrite=True):
             logging.error(cp.stderr)
     
     # Move html file to output directory
-    script_dir_name = os.path.dirname(os.path.realpath(__file__))# os.path.dirname(os.path.abspath(__file__))
+    script_dir_name = os.path.dirname(os.path.realpath(__file__))
     html_output_file = os.path.join(script_dir_name, html_basename)
     try:
         os.rename(html_output_file, html_fname)
