@@ -55,8 +55,14 @@ def convert_doc_to_html(doc_file, output_dir, overwrite=True):
             logging.error(cp.stderr)
     
     # Move html file to output directory
-    os.rename(os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), html_basename), html_fname)
+    script_dir_name = os.path.dirname(os.path.realpath(__file__))# os.path.dirname(os.path.abspath(__file__))
+    html_output_file = os.path.join(script_dir_name, html_basename)
+    try:
+        os.rename(html_output_file, html_fname)
+    except FileNotFoundError:
+        raise FileNotFoundError(html_output_file + " expected to exist. "\
+            + "soffice command may not have run. Check libreoffice not "\
+            + "already visiting file.")
 
     return html_fname
 
@@ -151,7 +157,7 @@ if __name__ == "__main__":
     OUT_FILE = os.path.join(DIRS["data"]["tmp"], "millington_succession.csv")
 
     # Convert .doc file from Millington2009 sup. materials to html file
-    html_fname = convert_doc_to_html(SRC_FILE, DIRS["data"]["tmp"], LOG_FILE)
+    html_fname = convert_doc_to_html(SRC_FILE, DIRS["data"]["tmp"])
     
     # Convert intermediate html file to csv
     millington_succession_html_to_csv(html_fname, OUT_FILE)
