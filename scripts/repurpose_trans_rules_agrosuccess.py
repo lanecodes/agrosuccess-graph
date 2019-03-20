@@ -29,8 +29,8 @@ from constants import (
     Aspect,
     SeedPresence,
     Water,
-    MillingtonLct,
-    AgroSuccessLct,
+    MillingtonLct as MLct,
+    AgroSuccessLct as AsLct,
 ) 
 
 # ------------------- Replace codes with human readable names------------------
@@ -47,7 +47,7 @@ def get_translator(trans_enum):
                 enum member name after it's been used to replace a codes in 
                 the column.
         """
-        df.loc[:,col_name] = df[col_name].apply(lambda x: trans_enum(x).name)
+        df.loc[:,col_name] = df[col_name].apply(lambda x: trans_enum(x).alias)
         if post_proc_func:
             df.loc[:,col_name] = df[col_name].apply(post_proc_func)
         return df
@@ -56,42 +56,43 @@ def get_translator(trans_enum):
 def millington_trans_table_codes_to_names(df):
     """Replace state/condition codes in Millington trans table with names."""
     for state_col in ["start", "delta_D"]:
-        df = get_translator(MillingtonLct)(df, state_col, lambda x: x.lower())
+        df.loc[:,state_col] = df[state_col].apply(lambda x: MLct(x).alias) 
 
     for seed_col in ["pine", "oak", "deciduous"]:
-        df = get_translator(SeedPresence)(
-            df, seed_col, lambda x: True if x=="TRUE" else False)
+        df.loc[:,seed_col] = df[seed_col].apply(
+            lambda x: True if SeedPresence(x).alias=="true" else False)
 
-    df = get_translator(Succession)(df, "succession", lambda x: x.lower())
-    df = get_translator(Aspect)(df, "aspect", lambda x: x.lower())
-    df = get_translator(Water)(df, "water", lambda x: x.lower())
+    cond_enum_d = {"succession": Succession, "aspect": Aspect, "water": Water}
+    for cond, e in cond_enum_d.items():
+        df.loc[:,cond] = df[cond].apply(lambda x: e(x).alias)
+
     return df
 
 # -------------- Convert 1:1 mapped state names to AgroSuccess-----------------
 def convert_millington_names_to_agrosuccess(df, start_col, end_col):
     """Apply 1:1 mappings to rename states to match AgroSuccess conventions."""
     map_dict = {
-    MillingtonLct.PINE: AgroSuccessLct.PINE,
-    MillingtonLct.HOLM_OAK: AgroSuccessLct.OAK,
-    MillingtonLct.DECIDUOUS: AgroSuccessLct.DECIDUOUS,
-    MillingtonLct.WATER_QUARRY: AgroSuccessLct.WATER_QUARRY,
-    MillingtonLct.BURNT: AgroSuccessLct.BURNT,
-    MillingtonLct.TRANSITION_FOREST: AgroSuccessLct.TRANS_FOREST,    
+    MLct.PINE: AsLct.PINE,
+    MLct.HOLM_OAK: AsLct.OAK,
+    MLct.DECIDUOUS: AsLct.DECIDUOUS,
+    MLct.WATER_QUARRY: AsLct.WATER_QUARRY,
+    MLct.BURNT: AsLct.BURNT,
+    MLct.TRANSITION_FOREST: AsLct.TRANS_FOREST,    
     }
 
-    unmapped_m_lcts = [lct.name for lct in MillingtonLct 
-                    if lct not in map_dict.keys()]
+    unmapped_m_lcts = [lct.name for lct in MLct 
+        if lct not in map_dict.keys()]
     assert unmapped_m_lcts == ["PASTURE", "HOLM_OAK_W_PASTURE", "CROPLAND", 
         "SCRUBLAND", "URBAN"], "LCTs in Millington, not used in AgroSuccess"
 
-    unmapped_as_lcts = [lct.name for lct in AgroSuccessLct 
-                        if lct not in map_dict.values()]
+    unmapped_as_lcts = [lct.name for lct in AsLct 
+        if lct not in map_dict.values()]
     assert unmapped_as_lcts == ['BARLEY', 'WHEAT', 'DAL', 'SHRUBLAND'],\
         "LCTs in AgroSuccess, not used in Millington"
 
     for col in [start_col, end_col]:
         for k, v in map_dict.items():
-            df.loc[:,col] = df[col].replace(k.name.lower(), v.name.lower())    
+            df.loc[:,col] = df[col].replace(k.alias, v.alias)    
     return df
 
 # --------------------- Drop URBAN and HOLM_OAK_W_PASTURE ---------------------
@@ -164,7 +165,7 @@ def drop_holm_oak_w_pasture_and_urban(df, start_col, end_col):
     
     # Confirm removing these states won't leave any other states in the model
     # inaccessbile, and remove it.
-    for state in ["holm_oak_w_pasture", "urban"]:
+    for state in [MLct.HOLM_OAK_W_PASTURE.alias, MLct.URBAN.alias]:
         assert state_is_exclusive_source_of_other_state(df, state, start_col,
                     end_col) == False
         no_rows = len(df.index)
@@ -189,19 +190,20 @@ def replace_cropland_with_new_crop_types(df, start_col, end_col):
     # Correspondingly no transitions have the new cropland land cover types
     # as their target state. This makes sense, as cropland is something which
     # humans need to create.
-    assert len(df[df[end_col] == "cropland"].index) == 0
+    assert len(df[df[end_col] == MLct.CROPLAND.alias].index) == 0
     
     # Rows from old table where cropland is the transition's starting state
-    from_cropland = df[df[start_col] == "cropland"]
+    from_cropland = df[df[start_col] == MLct.CROPLAND.alias]
     
     new_crop_dfs = []
-    for crop in ["wheat", "barley", "dal"]:
+    for crop in [AsLct.WHEAT.alias, AsLct.BARLEY.alias, AsLct.DAL.alias]:
         new_crop = from_cropland.copy()
         new_crop.loc[:,start_col] = crop
         new_crop_dfs.append(new_crop)
 
     new_df = df.copy()
-    new_df = new_df[new_df[start_col] != "cropland"] # remove old cropland rows
+    # remove old cropland rows
+    new_df = new_df[new_df[start_col] != MLct.CROPLAND.alias] 
     new_df = pd.concat([new_df] + new_crop_dfs)
 
     assert (len(new_df.index) == len(df.index) - len(from_cropland.index)                                 
@@ -219,10 +221,10 @@ def remove_transitions_bw_pasture_and_scrubland(df, start_col, end_col):
     These two land cover types to subsequently removed and replaced with
     'shrubland' type.
     """
-    scrub_to_pasture = ((df[start_col] == "pasture") 
-                        & (df[end_col] == "scrubland"))
-    pasture_to_scrub = ((df[start_col] == "scrubland") 
-                        & (df[end_col] == "pasture"))
+    scrub_to_pasture = ((df[start_col] == MLct.PASTURE.alias) 
+                        & (df[end_col] == MLct.SCRUBLAND.alias))
+    pasture_to_scrub = ((df[start_col] == MLct.SCRUBLAND.alias) 
+                        & (df[end_col] == MLct.PASTURE.alias))
     return df[~scrub_to_pasture & ~pasture_to_scrub]  
 
 def duplicates_start_with_pasture_or_scrubland(df, start_col, end_col):
@@ -231,8 +233,8 @@ def duplicates_start_with_pasture_or_scrubland(df, start_col, end_col):
     All have 'pasture' or 'shrubland' as their start state.
     """
     cond_cols = ["succession", "aspect", "pine", "oak", "deciduous", "water"]
-    rel_start_df = df[(df[start_col] == "pasture") 
-                    | (df[start_col] == "scrubland")]
+    rel_start_df = df[(df[start_col] == MLct.PASTURE.alias) 
+                    | (df[start_col] == MLct.SCRUBLAND.alias)]
     duplicate_check_cols = cond_cols + [end_col]
     duplicates = rel_start_df[rel_start_df.duplicated(duplicate_check_cols, 
         keep=False)]
@@ -245,8 +247,8 @@ def duplicates_end_with_pasture_or_scrubland(df, start_col, end_col):
     All have 'pasture' or 'shrubland' as their end state.
     """
     cond_cols = ["succession", "aspect", "pine", "oak", "deciduous", "water"]
-    rel_start_df = df[(df[end_col] == "pasture") 
-                        | (df[end_col] == "scrubland")]
+    rel_start_df = df[(df[end_col] == MLct.PASTURE.alias) 
+                        | (df[end_col] == MLct.SCRUBLAND.alias)]
     duplicate_check_cols = cond_cols + [start_col]
     duplicates = rel_start_df[rel_start_df.duplicated(duplicate_check_cols, 
         keep=False)]
@@ -274,8 +276,8 @@ def replace_pasture_scrubland_with_shrubland(df, start_col, end_col):
     assert len(duplicates_end.index) == 0, "No duplicates expected."
     
     for col in [start_col, end_col]:
-        for lct in ["scrubland", "pasture"]:
-            df.loc[:,col] = df[col].replace(lct, "shrubland")   
+        for lct in [MLct.SCRUBLAND.alias, MLct.PASTURE.alias]:
+            df.loc[:,col] = df[col].replace(lct, AsLct.SHRUBLAND.alias)   
     
     cond_cols = ["succession", "aspect", "pine", "oak", "deciduous", "water"]
     cond_cols += [start_col, end_col]
@@ -306,28 +308,18 @@ def remove_end_same_as_start_transitions(df, start_col, end_col):
 
 # ----------------------- Sort and reindex transition table -------------------
 def sort_and_reindex_trans_table(df, start_col, end_col):
-    def enum_name_from_code(e, name):
-        for item in e:
-            if item.name == name:
-                return item.value
-    
-    df.loc[:,"tmp_code_start"] = df[start_col].apply(
-        lambda x: enum_name_from_code(AgroSuccessLct, x.upper()))
-    df.loc[:,"tmp_code_end"] = df[end_col].apply(
-        lambda x: enum_name_from_code(AgroSuccessLct, x.upper()))
+    coded_to_named_d = {"tmp_code_start": start_col, "tmp_code_end": end_col}
+    for k, v in coded_to_named_d.items():
+        df.loc[:,k] = df[v].apply(lambda x: AsLct.from_alias(x).value)
     
     cond_cols = ["succession", "aspect", "pine", "oak", "deciduous", "water"]
     s_cols = ["tmp_code_start", "tmp_code_end"] + cond_cols
     df = df.sort_values(by=s_cols)
     df = df.reset_index()
     df.index.name = "transID"
-    df = df.drop(["index", "tmp_code_start", "tmp_code_end"], axis=1)
+    df = df.drop(["index"] + list(coded_to_named_d.keys()), axis=1)
     return df
 
-
-
-# TODO Add functions required to repurpose Millington succession table for 
-# Agrosuccess
 
 if __name__ == "__main__":
     # I've done my best to remove instances of setting with copy but this warning

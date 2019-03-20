@@ -5,8 +5,9 @@ constants.py
 Constants used in multiple scripts. Includes enumerators used to convert 
 between numerical codes and human readable values.
 """
-from enum import Enum
+from enum import Enum, unique
 
+@unique
 class Succession(Enum):
     """Represents succession pathways. 
     
@@ -17,22 +18,42 @@ class Succession(Enum):
     REGENERATION = 0
     SECONDARY = 1
 
+    @property
+    def alias(self):
+        return str(self.name).lower()
+
+@unique
 class Aspect(Enum):
     """Binary aspect, which way slope of land faces."""
     NORTH = 0
     SOUTH = 1
 
+    @property
+    def alias(self):
+        return str(self.name).lower()
+
+@unique
 class SeedPresence(Enum):
     """Presence of oak, pine, or deciduous seeds."""
     FALSE = 0
     TRUE = 1
 
+    @property
+    def alias(self):
+        return str(self.name).lower()
+
+@unique
 class Water(Enum):
     """Discretisation of soil moisture levels."""
     XERIC = 0
     MESIC = 1
     HYDRIC = 2
 
+    @property
+    def alias(self):
+        return str(self.name).lower()
+
+@unique
 class MillingtonLct(Enum):
     """Land cover types corresponding to James's PhD thesis.
     
@@ -51,16 +72,46 @@ class MillingtonLct(Enum):
     URBAN = 10
     BURNT = 11
 
+    @property
+    def alias(self):
+        return str(self.name).lower()
+
+@unique
 class AgroSuccessLct(Enum):
     """Land cover types and corresponding codes used in AgroSuccess."""
-    WATER_QUARRY = 0
-    BURNT = 1
-    BARLEY = 2
-    WHEAT = 3
-    DAL = 4
-    SHRUBLAND = 5
-    PINE = 6
-    TRANS_FOREST = 7
-    DECIDUOUS = 8
-    OAK = 9  
+    WATER_QUARRY = (0, "WaterQuarry")
+    BURNT = (1, "Burnt")
+    BARLEY = (2, "Barley")
+    WHEAT = (3, "Wheat")
+    DAL = (4, "DAL")
+    SHRUBLAND = (5, "Shrubland")
+    PINE = (6, "Pine")
+    TRANS_FOREST = (7, "TransForest")
+    DECIDUOUS = (8, "Deciduous")
+    OAK = (9, "Oak")
+
+    def __init__(self, code, alias):
+        self._code = code
+        self.alias = alias
+
+    @property
+    def value(self):
+        return self._code
+
+    @classmethod
+    def _from_attr(cls, attr, value):
+        matching_members = [member for name, member in cls.__members__.items()
+                            if getattr(member, attr) == value]
+        if not matching_members:
+            raise ValueError("No member in {0} with value: {1}"\
+                .format(cls, value))
+        elif len(matching_members) > 1:
+            raise ValueError("Multiple members in {0} with value: {1}"\
+                .format(cls, value))
+        else:
+            return matching_members[0]
+
+    @classmethod
+    def from_alias(cls, value):
+        return cls._from_attr("alias", value)
 
