@@ -14,5 +14,5 @@
 }
 
 // 1. AgroPastoralist
-CREATE (:AgentType {description:"Agropastoralist", code:"Agropastoralist",
+MERGE (:AgentType {description:"Agropastoralist", code:"Agropastoralist",
 		    model_ID:$model_ID});

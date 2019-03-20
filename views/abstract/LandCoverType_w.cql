@@ -15,7 +15,7 @@
 }
 
 // 1. Water/ Quarry
-CREATE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
+MERGE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
 			num:0,
 			model_ID:$model_ID,
 			fertility:-1,
@@ -24,7 +24,7 @@ CREATE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
 			land_cover_conversion_cost:-1});
 
 // 2. Burnt
-CREATE (:LandCoverType {description:"Burnt", code:"Burnt",
+MERGE (:LandCoverType {description:"Burnt", code:"Burnt",
 			num:1,
 			model_ID:$model_ID,
 			fertility:5,
@@ -33,7 +33,7 @@ CREATE (:LandCoverType {description:"Burnt", code:"Burnt",
 			land_cover_conversion_cost:1});
 
 // 3. Barley
-CREATE (:LandCoverType {description:"Barley", code:"Barley",
+MERGE (:LandCoverType {description:"Barley", code:"Barley",
 			num:2,
 			model_ID:$model_ID,
 			fertility:4,
@@ -42,7 +42,7 @@ CREATE (:LandCoverType {description:"Barley", code:"Barley",
 			land_cover_conversion_cost:1});
 
 // 4. Wheat
-CREATE (:LandCoverType {description:"Wheat", code:"Wheat",
+MERGE (:LandCoverType {description:"Wheat", code:"Wheat",
 			num:3,
 			model_ID:$model_ID,
 			fertility:4,
@@ -51,7 +51,7 @@ CREATE (:LandCoverType {description:"Wheat", code:"Wheat",
 			land_cover_conversion_cost:1});
 
 // 5. Depleated agricultural land 
-CREATE (:LandCoverType {description:"Depleated Agricultural Land", code:"DAL",
+MERGE (:LandCoverType {description:"Depleated Agricultural Land", code:"DAL",
 			num:4,
 			model_ID:$model_ID,
 			fertility:1,
@@ -60,7 +60,7 @@ CREATE (:LandCoverType {description:"Depleated Agricultural Land", code:"DAL",
 			land_cover_conversion_cost:5});
 
 // 6. Shrubland
-CREATE (:LandCoverType {description:"Shrubland", code:"Shrubland",
+MERGE (:LandCoverType {description:"Shrubland", code:"Shrubland",
 			num:5,
 			model_ID:$model_ID,
 			fertility:2,
@@ -69,7 +69,7 @@ CREATE (:LandCoverType {description:"Shrubland", code:"Shrubland",
 			land_cover_conversion_cost:2});
 
 // 7. Pine
-CREATE (:LandCoverType {description:"Pine", code:"Pine",
+MERGE (:LandCoverType {description:"Pine", code:"Pine",
 			num:6,
 			model_ID:$model_ID,
 			fertility:2,
@@ -78,7 +78,7 @@ CREATE (:LandCoverType {description:"Pine", code:"Pine",
 			land_cover_conversion_cost:3});
 
 // 8. Transition forest
-CREATE (:LandCoverType {description:"Transition Forest", code:"TransForest",
+MERGE (:LandCoverType {description:"Transition Forest", code:"TransForest",
 			num:7,
 			model_ID:$model_ID,
 			fertility:3,
@@ -87,7 +87,7 @@ CREATE (:LandCoverType {description:"Transition Forest", code:"TransForest",
 			land_cover_conversion_cost:3});
 
 // 9. Deciduous
-CREATE (:LandCoverType {description:"Deciduous", code:"Deciduous",
+MERGE (:LandCoverType {description:"Deciduous", code:"Deciduous",
 			num:8,
 			model_ID:$model_ID,
 			fertility:3,
@@ -96,7 +96,7 @@ CREATE (:LandCoverType {description:"Deciduous", code:"Deciduous",
 			land_cover_conversion_cost:3});
 
 // 10. Oak
-CREATE (:LandCoverType {description:"Oak", code:"Oak",
+MERGE (:LandCoverType {description:"Oak", code:"Oak",
 			num:9,
 			model_ID:$model_ID,
 			fertility:3,
