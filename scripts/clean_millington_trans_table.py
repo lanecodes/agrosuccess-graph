@@ -32,9 +32,9 @@ machine-readable .csv format.
 import os
 import subprocess
 import logging
-from enum import Enum
 import pandas as pd
 from config import DIRS, exit_if_file_missing
+from constants import MillingtonLct
 
 def convert_doc_to_html(doc_file, output_dir, overwrite=True):
     """Use Libreoffice's `soffice` command to convert .doc file to .html.
@@ -95,49 +95,6 @@ def millington_succession_html_to_csv(html_file, csv_fname):
     
     return csv_fname
 
-class Succession(Enum):
-    """Represents succession pathways. 
-    
-    Regeneration entails there is material in the landscape which resprouting 
-    species can use to regenerate. Secondary succession is contrasted with 
-    primary succession.
-    """
-    REGENERATION = 0
-    SECONDARY = 1
-
-class Aspect(Enum):
-    """Binary aspect, which way slope of land faces."""
-    NORTH = 0
-    SOUTH = 1
-
-class SeedPresence(Enum):
-    """Presence of oak, pine, or deciduous seeds."""
-    FALSE = 0
-    TRUE = 1
-
-class Water(Enum):
-    """Discretisation of soil moisture levels."""
-    XERIC = 0
-    MESIC = 1
-    HYDRIC = 2
-
-class MillingtonLct(Enum):
-    """Land cover types corresponding to James's PhD thesis.
-    
-    These are the codes which correspond to the transition table included in 
-    the supplementary materials for Millington2009 paper.
-    """
-    PINE = 1
-    TRANSITION_FOREST = 2
-    DECIDUOUS = 3
-    HOLM_OAK = 4
-    PASTURE = 5
-    HOLM_OAK_W_PASTURE = 6
-    CROPLAND = 7
-    SCRUBLAND = 8
-    WATER_QUARRY = 9
-    URBAN = 10
-    BURNT = 11
 
 if __name__ == "__main__":
     # Change working directory to location of script

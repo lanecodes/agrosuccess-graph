@@ -19,32 +19,19 @@ The objectives of this script are are:
 import os 
 import sys
 import logging
-
 import warnings
-from enum import Enum
+
 import pandas as pd
 
 from config import DIRS, exit_if_file_missing
-from clean_millington_trans_table import (
+from constants import (
     Succession,
     Aspect,
     SeedPresence,
     Water,
     MillingtonLct,
-)
-
-class AgroSuccessLct(Enum):
-    """Land cover types and corresponding codes used in AgroSuccess."""
-    WATER_QUARRY = 0
-    BURNT = 1
-    BARLEY = 2
-    WHEAT = 3
-    DAL = 4
-    SHRUBLAND = 5
-    PINE = 6
-    TRANS_FOREST = 7
-    DECIDUOUS = 8
-    OAK = 9   
+    AgroSuccessLct,
+) 
 
 # ------------------- Replace codes with human readable names------------------
 def get_translator(trans_enum):
