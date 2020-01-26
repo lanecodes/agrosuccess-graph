@@ -1,0 +1,11 @@
+name: as_model
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7
+  - pip
+  - pandas
+  - xlrd
+  - pip:
+    - pytest
+    - git+https://github.com/lanecodes/cymod.git
