@@ -8,7 +8,8 @@ succession rules table.
 import os 
 import sys
 
-DATA_DIR = os.path.abspath("/home/andrew/AgroSuccessGraph/data")
+DATA_DIR = os.path.abspath("/home/andrew/Documents/phd/models/"
+                           "AgroSuccess/data")
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 DIRS = {
     "scripts": THIS_DIR,

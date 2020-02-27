@@ -49,10 +49,11 @@ def convert_doc_to_html(doc_file, output_dir, overwrite=True):
     cmd = ["soffice", "--convert-to", "html:XHTML Writer File:UTF8", doc_file]
 
     if overwrite or not os.path.exists(html_fname):
-        cp = subprocess.run(cmd, capture_output=True)
-        logging.info(cp.stdout)
-        if cp.stderr:
-            logging.error(cp.stderr)
+        try:
+            output = subprocess.check_output(cmd)
+        except subprocess.CalledProcessError as e:
+            logging.error("libreoffice failed to convert .doc file to .html")
+            raise e
     
     # Move html file to output directory
     script_dir_name = os.path.dirname(os.path.realpath(__file__))

@@ -6,6 +6,10 @@ dependencies:
   - pip
   - pandas
   - xlrd
+  - lxml
+  - html5lib
+  - beautifulsoup4
   - pip:
     - pytest
-    - git+https://github.com/lanecodes/cymod.git
+    - ipdb
+    - cymod
