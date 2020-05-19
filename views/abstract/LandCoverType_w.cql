@@ -32,8 +32,8 @@ MERGE (:LandCoverType {description:"Burnt", code:"Burnt",
  			wood_value:1,
 			land_cover_conversion_cost:1});
 
-// 3. Barley
-MERGE (:LandCoverType {description:"Barley", code:"Barley",
+// 3. Wheat
+MERGE (:LandCoverType {description:"Wheat", code:"Wheat",
 			num:2,
 			model_ID:$model_ID,
 			fertility:4,
@@ -41,63 +41,54 @@ MERGE (:LandCoverType {description:"Barley", code:"Barley",
  			wood_value:-1,
 			land_cover_conversion_cost:1});
 
-// 4. Wheat
-MERGE (:LandCoverType {description:"Wheat", code:"Wheat",
-			num:3,
-			model_ID:$model_ID,
-			fertility:4,
-			digestible_matter:2,
- 			wood_value:-1,
-			land_cover_conversion_cost:1});
-
-// 5. Depleated agricultural land 
+// 4. Depleated agricultural land
 MERGE (:LandCoverType {description:"Depleated Agricultural Land", code:"DAL",
-			num:4,
+			num:3,
 			model_ID:$model_ID,
 			fertility:1,
 			digestible_matter:2,
  			wood_value:-1,
 			land_cover_conversion_cost:5});
 
-// 6. Shrubland
+// 5. Shrubland
 MERGE (:LandCoverType {description:"Shrubland", code:"Shrubland",
-			num:5,
+			num:4,
 			model_ID:$model_ID,
 			fertility:2,
 			digestible_matter:5,
  			wood_value:-1,
 			land_cover_conversion_cost:2});
 
-// 7. Pine
+// 6. Pine
 MERGE (:LandCoverType {description:"Pine", code:"Pine",
-			num:6,
+			num:5,
 			model_ID:$model_ID,
 			fertility:2,
 			digestible_matter:2,
  			wood_value:5,
 			land_cover_conversion_cost:3});
 
-// 8. Transition forest
+// 7. Transition forest
 MERGE (:LandCoverType {description:"Transition Forest", code:"TransForest",
-			num:7,
+			num:6,
 			model_ID:$model_ID,
 			fertility:3,
 			digestible_matter:4,
  			wood_value:4,
 			land_cover_conversion_cost:3});
 
-// 9. Deciduous
+// 8. Deciduous
 MERGE (:LandCoverType {description:"Deciduous", code:"Deciduous",
-			num:8,
+			num:7,
 			model_ID:$model_ID,
 			fertility:3,
 			digestible_matter:5,
  			wood_value:4,
 			land_cover_conversion_cost:3});
 
-// 10. Oak
+// 9. Oak
 MERGE (:LandCoverType {description:"Oak", code:"Oak",
-			num:9,
+			num:8,
 			model_ID:$model_ID,
 			fertility:3,
 			digestible_matter:4,

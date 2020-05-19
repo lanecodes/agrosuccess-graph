@@ -87,7 +87,7 @@ def convert_millington_names_to_agrosuccess(df, start_col, end_col):
 
     unmapped_as_lcts = [lct.name for lct in AsLct 
         if lct not in map_dict.values()]
-    assert unmapped_as_lcts == ['BARLEY', 'WHEAT', 'DAL', 'SHRUBLAND'],\
+    assert unmapped_as_lcts == ['WHEAT', 'DAL', 'SHRUBLAND'],\
         "LCTs in AgroSuccess, not used in Millington"
 
     for col in [start_col, end_col]:
@@ -173,9 +173,9 @@ def drop_holm_oak_w_pasture_and_urban(df, start_col, end_col):
         assert len(df.index) < no_rows   
     return df
 
-# ------------ Replace 'cropland' with 'barley', 'wheat' and 'DAL' --------
+# ------------ Replace 'cropland' with 'wheat' and 'DAL' --------
 def replace_cropland_with_new_crop_types(df, start_col, end_col):
-    """Replace Millington's cropland state with wheat, barley and DAL.
+    """Replace Millington's cropland state with wheat and DAL.
     
     Args:
         df (:obj:`pandas.DataFrame`): Original transition table containing 
@@ -184,7 +184,7 @@ def replace_cropland_with_new_crop_types(df, start_col, end_col):
     Returns:
         df: A new dataframe where rows representing transitions involving 
             cropland are replaced with rows describing transitions involving
-            wheat, barley and DAL (depleated agricultural land) states.
+            wheat and DAL (depleated agricultural land) states.
     """
     # There are no transitions where cropland is the target state. 
     # Correspondingly no transitions have the new cropland land cover types
@@ -196,7 +196,7 @@ def replace_cropland_with_new_crop_types(df, start_col, end_col):
     from_cropland = df[df[start_col] == MLct.CROPLAND.alias]
     
     new_crop_dfs = []
-    for crop in [AsLct.WHEAT.alias, AsLct.BARLEY.alias, AsLct.DAL.alias]:
+    for crop in [AsLct.WHEAT.alias, AsLct.DAL.alias]:
         new_crop = from_cropland.copy()
         new_crop.loc[:,start_col] = crop
         new_crop_dfs.append(new_crop)
@@ -206,9 +206,10 @@ def replace_cropland_with_new_crop_types(df, start_col, end_col):
     new_df = new_df[new_df[start_col] != MLct.CROPLAND.alias] 
     new_df = pd.concat([new_df] + new_crop_dfs)
 
-    assert (len(new_df.index) == len(df.index) - len(from_cropland.index)                                 
-        + 3*len(from_cropland.index)), "Each transition rule starting with "\
-        + "'cropland' should be replaced by one each from 'wheat', 'barley' "\
+    assert len(new_df.index) == (
+        len(df.index) - len(from_cropland.index)                                 
+        + 2 * len(from_cropland.index)), "Each transition rule starting with "\
+        + "'cropland' should be replaced by one each from 'wheat' "\
         + "and 'DAL' but the resulting numbers of rows don't tally."
 
     return new_df
