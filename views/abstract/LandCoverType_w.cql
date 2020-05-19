@@ -41,8 +41,8 @@ MERGE (:LandCoverType {description:"Wheat", code:"Wheat",
  			wood_value:-1,
 			land_cover_conversion_cost:1});
 
-// 4. Depleated agricultural land
-MERGE (:LandCoverType {description:"Depleated Agricultural Land", code:"DAL",
+// 4. Depleted agricultural land
+MERGE (:LandCoverType {description:"Depleted Agricultural Land", code:"DAL",
 			num:3,
 			model_ID:$model_ID,
 			fertility:1,

@@ -28,7 +28,7 @@ CREATE
 MERGE (a)-[:PRACTICES]->(eea)
 MERGE (srcLCT)<-[:SOURCE]-(eea)-[:TARGET]->(tgtLCT);
     
-// 2. Restore depleated agricultural land for wheat planting
+// 2. Restore depleted agricultural land for wheat planting
 MATCH
      (a:AgentType {code:"Agropastoralist", model_ID:$model_ID}),
      (srcLCT:LandCoverType {code:"DAL", model_ID:$model_ID}),
@@ -36,7 +36,7 @@ MATCH
 CREATE
       (eea:EcoEngineeringActivity
        {model_ID:$model_ID,
-	description:"Restore depleated agricultural land and plant wheat",
+	description:"Restore depleted agricultural land and plant wheat",
 	effort:5})
 MERGE (a)-[:PRACTICES]->(eea)
 MERGE (srcLCT)<-[:SOURCE]-(eea)-[:TARGET]->(tgtLCT);

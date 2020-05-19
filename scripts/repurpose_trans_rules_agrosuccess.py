@@ -184,7 +184,7 @@ def replace_cropland_with_new_crop_types(df, start_col, end_col):
     Returns:
         df: A new dataframe where rows representing transitions involving 
             cropland are replaced with rows describing transitions involving
-            wheat and DAL (depleated agricultural land) states.
+            wheat and DAL (depleted agricultural land) states.
     """
     # There are no transitions where cropland is the target state. 
     # Correspondingly no transitions have the new cropland land cover types
