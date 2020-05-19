@@ -19,8 +19,6 @@ MERGE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
 			num:0,
 			model_ID:$model_ID,
 			fertility:0,
-			digestible_matter:-1,
- 			wood_value:-1,
 			land_cover_conversion_cost:-1});
 
 // 2. Burnt
@@ -28,8 +26,6 @@ MERGE (:LandCoverType {description:"Burnt", code:"Burnt",
 			num:1,
 			model_ID:$model_ID,
 			fertility:5,
-			digestible_matter:1,
- 			wood_value:1,
 			land_cover_conversion_cost:1});
 
 // 3. Wheat
@@ -37,8 +33,6 @@ MERGE (:LandCoverType {description:"Wheat", code:"Wheat",
 			num:2,
 			model_ID:$model_ID,
 			fertility:4,
-			digestible_matter:2,
- 			wood_value:-1,
 			land_cover_conversion_cost:1});
 
 // 4. Depleted agricultural land
@@ -46,8 +40,6 @@ MERGE (:LandCoverType {description:"Depleted Agricultural Land", code:"DAL",
 			num:3,
 			model_ID:$model_ID,
 			fertility:1,
-			digestible_matter:2,
- 			wood_value:-1,
 			land_cover_conversion_cost:5});
 
 // 5. Shrubland
@@ -55,8 +47,6 @@ MERGE (:LandCoverType {description:"Shrubland", code:"Shrubland",
 			num:4,
 			model_ID:$model_ID,
 			fertility:2,
-			digestible_matter:5,
- 			wood_value:-1,
 			land_cover_conversion_cost:2});
 
 // 6. Pine
@@ -64,8 +54,6 @@ MERGE (:LandCoverType {description:"Pine", code:"Pine",
 			num:5,
 			model_ID:$model_ID,
 			fertility:2,
-			digestible_matter:2,
- 			wood_value:5,
 			land_cover_conversion_cost:3});
 
 // 7. Transition forest
@@ -73,8 +61,6 @@ MERGE (:LandCoverType {description:"Transition Forest", code:"TransForest",
 			num:6,
 			model_ID:$model_ID,
 			fertility:3,
-			digestible_matter:4,
- 			wood_value:4,
 			land_cover_conversion_cost:3});
 
 // 8. Deciduous
@@ -82,8 +68,6 @@ MERGE (:LandCoverType {description:"Deciduous", code:"Deciduous",
 			num:7,
 			model_ID:$model_ID,
 			fertility:3,
-			digestible_matter:5,
- 			wood_value:4,
 			land_cover_conversion_cost:3});
 
 // 9. Oak
@@ -91,6 +75,4 @@ MERGE (:LandCoverType {description:"Oak", code:"Oak",
 			num:8,
 			model_ID:$model_ID,
 			fertility:3,
-			digestible_matter:4,
- 			wood_value:3,
 			land_cover_conversion_cost:4});
