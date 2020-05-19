@@ -18,7 +18,7 @@
 MERGE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
 			num:0,
 			model_ID:$model_ID,
-			fertility:-1,
+			fertility:0,
 			digestible_matter:-1,
  			wood_value:-1,
 			land_cover_conversion_cost:-1});
