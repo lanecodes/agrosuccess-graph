@@ -1,5 +1,0 @@
-#! /usr/bin/env bash
-
-PYENV="/home/andrew/anaconda2/envs/graphs27/bin/python"
-$PYENV -m cymod --refresh -u andrew -d views -p global_parameters.json --suffix _w
-
