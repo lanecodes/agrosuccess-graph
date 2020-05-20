@@ -44,11 +44,11 @@ if REFRESH_GRAPH:
     sgl.refresh_graph(params)
 
 # Load queries stored in cypher files
-print("Loading tabular data from", CYPHER_VIEWS_DIR, "...") 
+print("Loading cypher queries from", CYPHER_VIEWS_DIR, "...")
 sgl.load_cypher(CYPHER_VIEWS_DIR, "_w", params)
 
 # Load tabular data
-print("Loading cypher queries from", SUCCESSION_TABLE_PATH, "...")
+print("Loading tabular data from", SUCCESSION_TABLE_PATH, "...")
 sgl.load_tabular(agrosuccess_succession_df(SUCCESSION_TABLE_PATH), 
     'start', 'delta_D', labels=labels, global_params=params)
 
