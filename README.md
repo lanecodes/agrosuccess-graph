@@ -49,7 +49,7 @@ name of the container.
 ## Loading a model into the database
 
 Navigate to the scripts directory and run Python code against the database to
-load the Gredos model specified by the Cypher files in the `views` directory
+load the AgroSuccess model specified by the Cypher files in the `views` directory
 into the database.
 
 ```bash
@@ -59,7 +59,7 @@ python load_agrosuccess_model.py
 
 Multiple versions of the model can be loaded into the database at once by
 changing the `model_ID` parameter in `global_parameters.json` before running
-`load_gredos_model.py` to load the new version of the model into the database.
+`load_agrosuccess_model.py` to load the new version of the model into the database.
 Model nodes corresponding to different model versions can be distinguished by
 their `model_ID` property.
 
@@ -89,3 +89,19 @@ mapping Neo4j logs to a local volume as is
 [advised](https://neo4j.com/developer/docker-run-neo4j/) on the Neo4j website.
 The workaround, which is implemented in the script `create-container.sh`, is
 to use Docker volumes rather than file system mounts.
+
+## Changelog
+
+### [Unreleased]
+
+#### 1 - 2020-05-20 - Remove machine-generated succession Cypher files
+
+An older version of [Cymod](https://github.com/lanecodes/cymod) (before v0.0.3) produced machine generated cypher files based on the Millington succession rules table. These were written to `/views/succession` and placed under version control in `3e9c481` on 2018-05-01.
+
+on 2019-01-25 TransTableProcessor was added to Cymod in Cymod commit [e79fa54](https://github.com/lanecodes/cymod/commit/e79fa545d68e59f4608bdb99992402ed4f6ec7fb), and GraphLoader gained the functionality to load tabular transition table data directly into a database in Cymod commit [c091c06](https://github.com/lanecodes/cymod/commit/c091c06f3b049d272df2925d6ab11f7865330552) on 2019-02-14.
+
+On 2019-03-19 (commit `06a7544 `) we add the script `load_agrosuccess_model.py` to AgroSuccess Graph which loads data from the Millington table into the graph database directly, but to not remove the older machine generated Cypher files containing the same information.
+
+##### Removed
+
+- Delete old machine-generated Cypher files describing succession processes which are now loaded directly from csv to graph database using Cymod.
