@@ -90,6 +90,16 @@ mapping Neo4j logs to a local volume as is
 The workaround, which is implemented in the script `create-container.sh`, is
 to use Docker volumes rather than file system mounts.
 
+## TODO
+
+### Fix `visualisation_summary_w.cql` bug
+
+Because `load_agrosuccess_model.py` first loads all Cypher and then loads all tabular data, there are no transitions for `visualisation_summary_w.cql` to match at the time its loaded. This should be fixed by modifying Cymod so that during the call to `ServerGraphLoader.commit`, all queries added to the queue by `ServerGraphLoader.load_cypher` and `ServerGraphLoader.load_tabular` are sorted before running the commits. This might involve adding an optional parameter to `load_tabular` to specify what the priority of the queries derived from the table should be.
+
+This shouldn't cause a problem for the use of the non-summarised data in
+simulations. It is more an inconvenience to need to manually evaluate the
+Cypher in `visualisation_summary_w.cql` after the graph has been fully loaded.
+
 ## Changelog
 
 ### [Unreleased]
