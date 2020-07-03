@@ -5,7 +5,7 @@ clean_millington_trans_table.py
 Extract succession pathday data published by Millington et al. 2009.
 
 In their paper, Millington, Wainwright and Perry (2009) describe a landscape 
-fire-succession model which represents the variaous ways in which landscape 
+fire-succession model which represents the various ways in which landscape
 vegetation can evolve under different environmental conditions. An important 
 component of this model is a representation of the different pathways along 
 which a particular patch of the landscape might evolve, contingent on other 
@@ -34,7 +34,7 @@ import subprocess
 import logging
 import pandas as pd
 from config import DIRS, exit_if_file_missing
-from constants import MillingtonLct
+from constants import MillingtonPaperLct
 
 def convert_doc_to_html(doc_file, output_dir, overwrite=True):
     """Use Libreoffice's `soffice` command to convert .doc file to .html.

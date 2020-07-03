@@ -104,6 +104,32 @@ Cypher in `visualisation_summary_w.cql` after the graph has been fully loaded.
 
 ### [Unreleased]
 
+#### 2 - 2020-07-03 - Update land-cover type code aliases
+
+The enum which we used to use to map between land-cover type aliases and
+numerical codes found in the Millington, 2009 supplementary materials turned
+out to not correspond to the land cover state codes used in Table 4.1 of
+James' thesis as first thought. Here we correct for that mistake.
+
+##### ADDED
+
+- New enum in `constants.py` called `MillingtonPaperLct` which encodes the
+  corrected mapping between numerical codes in the long table in the
+  supplementary materials of Millington et al. 2009 and the name of land-cover
+  states.
+- Analytical scripts made to check consistency between `MillingtonPaperLct` and
+  the long transition rule table are included in `scripts/check_lct_codes.py`
+  and `scripts/summarise_millington_table.py`, as well as notes in
+  `data/raw/millington-land-cover-state-codes.csv`.
+
+##### CHANGED
+
+- The enum in `constants.py` which was called `MillingtonLct` has been renamed
+  to `MillingtonThesisLct`. This contains the land-cover state code mapping
+  used in the thesis.
+- References to `MillingtonLct` in `repurpose_trans_rules_agrosuccess.py`,
+  `clean_millington_trans_table.py` changed to refer to `MillingtonPaperLct`.
+
 #### 1 - 2020-05-20 - Remove machine-generated succession Cypher files
 
 An older version of [Cymod](https://github.com/lanecodes/cymod) (before v0.0.3) produced machine generated cypher files based on the Millington succession rules table. These were written to `/views/succession` and placed under version control in `3e9c481` on 2018-05-01.

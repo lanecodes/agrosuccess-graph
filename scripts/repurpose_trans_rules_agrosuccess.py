@@ -29,7 +29,7 @@ from constants import (
     Aspect,
     SeedPresence,
     Water,
-    MillingtonLct as MLct,
+    MillingtonPaperLct as MLct,
     AgroSuccessLct as AsLct,
 ) 
 
