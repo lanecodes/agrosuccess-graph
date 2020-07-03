@@ -1,0 +1,28 @@
+Code,Millington thesis type,*SM table type,*SM State change
+1,Pine,Pine,"2; 15–40 years
+4; 20 years "
+2,Transition Forest,Transition Forest,"1; 20–30 years
+4; 20–25 years
+6; 20–50 years"
+3,Deciduous,Pasture,5; 3 years
+4,Holm Oak,Deciduous,"1; 20–30 years
+2; 30–40 years"
+5,Pasture,Scrubland,"1; 10–15 years
+2; 15 years
+4; 15–20 years
+6; 30–50 years"
+6,Holm Oak with Pasture,Holm Oak,2; 30 years
+7,Cropland,Holm Oak with Pasture,5; 3 years
+8,Scrubland,Cropland,5; 3 years
+9,Water/ Quarry,Water/ Quarry,
+10,Urban,Urban,
+11,Burnt,Burnt,5; 3 years
+,,,
+,,,
+Notes,,,
+* SM stands for Supplementary Materials from Millington et al. (2009) https://doi.org/10.1016/j.envsoft.2009.03.013,,,
+,,,
+This table was constructed on 2020-06-02 when James and I noticed inconsistencies between the,,,
+land-cover state codes used in Table 4.1 of James’s thesis and those used in the supplementary,,,
+materials of Millington et al. (2009). In particular it did not make sense that code 3 only transitioned,,,
+to code 5 if 3=deciduous and 5=pasture.,,,
