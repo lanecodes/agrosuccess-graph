@@ -18,6 +18,7 @@
 MERGE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
 			num:0,
 			model_ID:$model_ID,
+			is_mature_vegetation:false,
 			fertility:0,
 			land_cover_conversion_cost:-1});
 
@@ -25,6 +26,7 @@ MERGE (:LandCoverType {description:"Water/ Quarry", code:"WaterQuarry",
 MERGE (:LandCoverType {description:"Burnt", code:"Burnt",
 			num:1,
 			model_ID:$model_ID,
+			is_mature_vegetation:false,
 			fertility:5,
 			land_cover_conversion_cost:1});
 
@@ -32,6 +34,7 @@ MERGE (:LandCoverType {description:"Burnt", code:"Burnt",
 MERGE (:LandCoverType {description:"Wheat", code:"Wheat",
 			num:2,
 			model_ID:$model_ID,
+			is_mature_vegetation:false,
 			fertility:4,
 			land_cover_conversion_cost:1});
 
@@ -39,6 +42,7 @@ MERGE (:LandCoverType {description:"Wheat", code:"Wheat",
 MERGE (:LandCoverType {description:"Depleted Agricultural Land", code:"DAL",
 			num:3,
 			model_ID:$model_ID,
+			is_mature_vegetation:false,
 			fertility:1,
 			land_cover_conversion_cost:5});
 
@@ -46,6 +50,7 @@ MERGE (:LandCoverType {description:"Depleted Agricultural Land", code:"DAL",
 MERGE (:LandCoverType {description:"Shrubland", code:"Shrubland",
 			num:4,
 			model_ID:$model_ID,
+			is_mature_vegetation:false,
 			fertility:2,
 			land_cover_conversion_cost:2});
 
@@ -53,6 +58,7 @@ MERGE (:LandCoverType {description:"Shrubland", code:"Shrubland",
 MERGE (:LandCoverType {description:"Pine", code:"Pine",
 			num:5,
 			model_ID:$model_ID,
+			is_mature_vegetation:true,
 			fertility:2,
 			land_cover_conversion_cost:3});
 
@@ -60,6 +66,7 @@ MERGE (:LandCoverType {description:"Pine", code:"Pine",
 MERGE (:LandCoverType {description:"Transition Forest", code:"TransForest",
 			num:6,
 			model_ID:$model_ID,
+			is_mature_vegetation:false,
 			fertility:3,
 			land_cover_conversion_cost:3});
 
@@ -67,6 +74,7 @@ MERGE (:LandCoverType {description:"Transition Forest", code:"TransForest",
 MERGE (:LandCoverType {description:"Deciduous", code:"Deciduous",
 			num:7,
 			model_ID:$model_ID,
+			is_mature_vegetation:true,
 			fertility:3,
 			land_cover_conversion_cost:3});
 
@@ -74,5 +82,6 @@ MERGE (:LandCoverType {description:"Deciduous", code:"Deciduous",
 MERGE (:LandCoverType {description:"Oak", code:"Oak",
 			num:8,
 			model_ID:$model_ID,
+			is_mature_vegetation:true,
 			fertility:3,
 			land_cover_conversion_cost:4});

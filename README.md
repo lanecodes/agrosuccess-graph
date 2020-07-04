@@ -104,6 +104,16 @@ Cypher in `visualisation_summary_w.cql` after the graph has been fully loaded.
 
 ### [Unreleased]
 
+#### 3 - 2020-07-04 - Add mature vegetation attribute to land-cover states
+
+##### ADDED
+
+Binary `is_mature_vegetation` attribute added to all land-cover types,
+reflecting whether that land-cover type is what could be considered a 'climax'
+(in a Clementsian sense) community. This attribute can be used in simulation
+models to enforce a rule that when a grid cell reaches a mature vegetation
+state, all extant juvenile vegetation is removed.
+
 #### 2 - 2020-07-03 - Update land-cover type code aliases
 
 The enum which we used to use to map between land-cover type aliases and
