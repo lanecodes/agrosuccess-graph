@@ -70,23 +70,32 @@ def millington_trans_table_codes_to_names(df):
 
 # -------------- Convert 1:1 mapped state names to AgroSuccess-----------------
 def convert_millington_names_to_agrosuccess(df, start_col, end_col):
-    """Apply 1:1 mappings to rename states to match AgroSuccess conventions."""
+    """Apply 1:1 mappings to rename states to match AgroSuccess conventions.
+
+    Note that we don't map `URBAN` or `HOLM_OAK_W_PASTURE` from the Millington
+    paper because these are dropped in the function
+    `drop_holm_oak_w_pasture_and_urban`. Likewise `PASTURE` and `SCRUBLAND` are
+    handled in `remove_transitions_bw_pasture_and_scrubland`. Finally
+    `CROPLAND` is handled separately in `replace_cropland_with_new_crop_types`.
+    """
     map_dict = {
-    MLct.PINE: AsLct.PINE,
-    MLct.HOLM_OAK: AsLct.OAK,
-    MLct.DECIDUOUS: AsLct.DECIDUOUS,
-    MLct.WATER_QUARRY: AsLct.WATER_QUARRY,
-    MLct.BURNT: AsLct.BURNT,
-    MLct.TRANSITION_FOREST: AsLct.TRANS_FOREST,    
+        MLct.PINE: AsLct.PINE,
+        MLct.TRANSITION_FOREST: AsLct.TRANS_FOREST,
+        MLct.DECIDUOUS: AsLct.DECIDUOUS,
+        MLct.HOLM_OAK: AsLct.OAK,
+        MLct.WATER_QUARRY: AsLct.WATER_QUARRY,
+        MLct.BURNT: AsLct.BURNT,
     }
 
-    unmapped_m_lcts = [lct.name for lct in MLct 
-        if lct not in map_dict.keys()]
-    assert unmapped_m_lcts == ["PASTURE", "HOLM_OAK_W_PASTURE", "CROPLAND", 
-        "SCRUBLAND", "URBAN"], "LCTs in Millington, not used in AgroSuccess"
+    unmapped_m_lcts = [lct.name for lct in MLct
+                       if lct not in map_dict.keys()]
+    expected_unmapped_lcts = ["PASTURE", "SCRUBLAND", "HOLM_OAK_W_PASTURE",
+                              "CROPLAND", "URBAN"]
+    assert unmapped_m_lcts == expected_unmapped_lcts,\
+        "LCTs in Millington, not used in AgroSuccess"
 
-    unmapped_as_lcts = [lct.name for lct in AsLct 
-        if lct not in map_dict.values()]
+    unmapped_as_lcts = [lct.name for lct in AsLct
+                        if lct not in map_dict.values()]
     assert unmapped_as_lcts == ['WHEAT', 'DAL', 'SHRUBLAND'],\
         "LCTs in AgroSuccess, not used in Millington"
 
