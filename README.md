@@ -1,5 +1,7 @@
 # AgroSuccess Graph
 
+[![DOI](https://zenodo.org/badge/351936167.svg)](https://zenodo.org/badge/latestdoi/351936167)
+
 Code used to construct a graph database containing the AgroSuccess STM
 
 This is an application of [cymod](https://github.com/lanecodes/cymod).
