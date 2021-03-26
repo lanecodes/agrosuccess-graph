@@ -1,5 +1,9 @@
 # AgroSuccess Graph
 
+Code used to construct a graph database containing the AgroSuccess STM
+
+This is an application of [cymod](https://github.com/lanecodes/cymod).
+
 ## Requirements
 
 - [Docker](https://docs.docker.com/install/)
