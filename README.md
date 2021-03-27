@@ -25,6 +25,8 @@ Additional input data is provided by the Cypher queries in the `./views`
 directory, but this should be checked in under version control as part of this
 repository.
 
+[Millington2009]: http://dx.doi.org/10.1016/j.envsoft.2009.03.013
+
 ## Setup
 
 Install and initialise the Python environment
