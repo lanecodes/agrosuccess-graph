@@ -18,4 +18,8 @@ data/created/agrosuccess_succession.csv
 # logs
 scripts/logs/
 
+# Raw data to be downloaded by the user
+data/raw
 
+# Procedurally generated data
+data/created
