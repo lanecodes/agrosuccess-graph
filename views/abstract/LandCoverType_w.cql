@@ -85,3 +85,11 @@ MERGE (:LandCoverType {description:"Oak", code:"Oak",
 			is_mature_vegetation:true,
 			fertility:3,
 			land_cover_conversion_cost:4});
+
+// 10. Grassland
+MERGE (:LandCoverType {description:"Grassland", code:"Grassland",
+			num:9,
+			model_ID:$model_ID,
+			is_mature_vegetation:false,
+			fertility:4,
+			land_cover_conversion_cost:1});

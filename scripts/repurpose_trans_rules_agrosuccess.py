@@ -96,7 +96,7 @@ def convert_millington_names_to_agrosuccess(df, start_col, end_col):
 
     unmapped_as_lcts = [lct.name for lct in AsLct
                         if lct not in map_dict.values()]
-    assert unmapped_as_lcts == ['WHEAT', 'DAL', 'SHRUBLAND'],\
+    assert unmapped_as_lcts == ['WHEAT', 'DAL', 'SHRUBLAND', 'GRASSLAND'],\
         "LCTs in AgroSuccess, not used in Millington"
 
     for col in [start_col, end_col]:
@@ -296,6 +296,54 @@ def replace_pasture_scrubland_with_shrubland(df, start_col, end_col):
 
     return df
 
+
+# ----- Insert grassland land-cover type
+def insert_grassland_land_cover_type(df, start_col, end_col):
+    """Creates transition rules for the grassland land-cover type.
+
+    Millington et al. 2009 did not include a grassland land-cover type.
+    We modify their transition rules to insert grassland in between Burnt
+    and Shrubland in the succession trajectory. Whereas previously we had
+    the transition between Burnt and shrubland taking 2 years, we now have
+    Burnt to Grassland take 1 year, and Grassland to Shrubland also take
+    1 year.
+    """
+    burnt_to_grassland_time = 1
+    grassland_to_shrubland_time = 1
+    burnt_to_shrub_row = (df[start_col] == 'Burnt') & (df[end_col] == 'Shrubland')
+    old_burnt_to_shrub_rules_df = df[burnt_to_shrub_row]
+    rest_df = df[~burnt_to_shrub_row]
+    assert len(df.index) == len(old_burnt_to_shrub_rules_df.index) + len(rest_df.index)
+    
+    burnt_to_grassland_rules_df = (
+        old_burnt_to_shrub_rules_df.copy()
+        .assign(**{
+            end_col: 'Grassland',
+            'delta_T': burnt_to_grassland_time
+        })
+    )
+
+    grassland_to_shrubland_rules_df = (
+        old_burnt_to_shrub_rules_df.copy()
+        .assign(**{
+            start_col: 'Grassland',
+            end_col: 'Shrubland',
+            'delta_T': grassland_to_shrubland_time
+        })
+    )
+
+    new_df = pd.concat([
+        rest_df,
+        burnt_to_grassland_rules_df,
+        grassland_to_shrubland_rules_df,
+    ])
+    assert len(new_df.index) == (
+        len(rest_df.index) + 2 * len(old_burnt_to_shrub_rules_df.index)
+    )
+
+    return new_df
+
+
 # ----- Remove transitions starting and ending with same state ----------------
 def remove_end_same_as_start_transitions(df, start_col, end_col):
     """Remove rows corresponding to transitions where start equals end state.
@@ -364,7 +412,7 @@ if __name__ == "__main__":
     as_df = drop_holm_oak_w_pasture_and_urban(as_df, START_COL, END_COL)
     as_df = replace_cropland_with_new_crop_types(as_df, START_COL, END_COL)
     as_df = replace_pasture_scrubland_with_shrubland(as_df, START_COL, END_COL)
+    as_df = insert_grassland_land_cover_type(as_df, START_COL, END_COL)
     as_df = remove_end_same_as_start_transitions(as_df, START_COL, END_COL)
     as_df = sort_and_reindex_trans_table(as_df, START_COL, END_COL)
     as_df.to_csv(OUT_FILE)
-

@@ -130,6 +130,7 @@ class AgroSuccessLct(Enum):
     TRANS_FOREST = (6, "TransForest")
     DECIDUOUS = (7, "Deciduous")
     OAK = (8, "Oak")
+    GRASSLAND = (9, "Grassland")
 
     def __init__(self, code, alias):
         self._code = code
